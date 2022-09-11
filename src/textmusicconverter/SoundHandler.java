@@ -6,15 +6,24 @@ import java.util.Random;
 public class SoundHandler {
 
     //GENERAL CONSTANTS 
-    private static final short maxBpmIndex = 13;
-    private static short bpmIndexDefault = 9;
-    private static short currentBpmIndex = bpmIndexDefault;
+    private static final int maxBpmIndex = 13;
+    private static int bpmIndexDefault;
+
+    public static int getBpmIndexDefault() {
+        return bpmIndexDefault;
+    }
+
+    public static void setBpmIndexDefault(int bpmIndexDefault) {
+        SoundHandler.bpmIndexDefault = bpmIndexDefault;
+    }
+    
+    //public static int currentBpmIndex = getBpmIndexDefault();
     private static final short maxOctave = 10;
     private static final short minOctave = 1;
     private static short octaveDefault = 5;
     private static short currentOctave = octaveDefault;
-    private static final short defaultVolume = 40;
-    private static final short maxVolume = 100;
+    private static final int defaultVolume = 30;
+    private static final int maxVolume = 127;
 
     private static String currentInstrument = "PIANO";
 
@@ -28,7 +37,7 @@ public class SoundHandler {
     private static final Random random = new Random();
 
     // variables
-    private static short volume = defaultVolume;
+    private static int volume = defaultVolume;
     private static final char[] notes = {'A', 'B', 'C', 'D', 'F', 'G'};
     private static final String[] instruments = {
         "PIANO", "GUITAR", "TROMBONE", "TRUMPET", "CHURCH_ORGAN", "CLAVINET"
@@ -41,21 +50,16 @@ public class SoundHandler {
     
     
     public static void initialize() {
-        audioScript.add(String.format(":CON(7, %s)", String.valueOf(defaultVolume)));  // set default volume
-        audioScript.add("T[ALLEGRO]");  // set default BPM
+        audioScript.add(String.format("T[%s]", bpm[getBpmIndexDefault()]));  
+        audioScript.add(String.format(":CON(7, %s)", String.valueOf(defaultVolume))); 
     }
 
     public static void doubleVolume() {
-        volume *= 2;
-        if (volume > 127) {
-            volume = 127;
-        }
+        if (volume*2 < maxVolume) {
+            volume = volume*2;
+        }else
+            volume = defaultVolume;
 
-        audioScript.add(String.format(":CON(7, %s)", String.valueOf(volume)));
-    }
-
-    public static void resetVolume() {
-        volume = defaultVolume;
         audioScript.add(String.format(":CON(7, %s)", String.valueOf(volume)));
     }
 
@@ -85,32 +89,8 @@ public class SoundHandler {
         audioScript.add(String.format("I[%s]", newInstrument));
     }
 
-    public static void increaseBPM() {
-        if (currentBpmIndex < maxBpmIndex) {
-            currentBpmIndex++;
-        }
-
-        audioScript.add(String.format("T[%s]", bpm[currentBpmIndex]));
-    }
-
-    public static void setRandomBPM() {
-        int randomBpmIndex;
-
-        do {
-            randomBpmIndex = random.nextInt(bpm.length);
-        } while (randomBpmIndex == currentBpmIndex);
-
-        audioScript.add(String.format("T[%s]", bpm[randomBpmIndex]));
-    }
-
-    public static void phoneRinging() {
-        audioScript.add("I[TELEPHONE_RING]");
-        audioScript.add("Rq E E Rq");
-        audioScript.add(String.format("I[%s]", currentInstrument));
-    }
-
     public static void playPreviousNote() {
-        String lastNote = audioScript.get(audioScript.size() - 1);
+        String lastNote = audioScript.get(audioScript.size()-1);
         audioScript.add(lastNote);
     }
 

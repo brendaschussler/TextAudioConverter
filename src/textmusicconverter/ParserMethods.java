@@ -33,20 +33,14 @@ public class ParserMethods {
     public static void appendSilence() {
         SoundHandler.appendNote('R');
     }
+    
+    public static void repeatPreviousNote(){
+        SoundHandler.playPreviousNote();
+    }
 
     public static void doubleCurrentVol() {
         SoundHandler.doubleVolume();
     }
-
-    public static void returnStartVol() {
-        SoundHandler.resetVolume();
-    }
-
-    //public static void nonNoteVowel() {
-    // checar se o último caractere era uma nota e, se for, repeti-la (Audio.playPreviousNote())
-    // se não, emitir um bip (Audio.ring())
-    // as funções do áudio já foram implementadas, resta linkar com as do parse.
-    //}
     
     public static void octavePlus() {
         SoundHandler.increaseOctave();
@@ -64,11 +58,4 @@ public class ParserMethods {
         SoundHandler.switchInstrumentRandomly();
     }
 
-    public static void bpmPlus() {
-        SoundHandler.increaseBPM();
-    }
-
-    public static void semicolon() {
-        SoundHandler.setRandomBPM();
-    }
 }

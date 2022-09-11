@@ -2,30 +2,42 @@ package textmusicconverter;
 
 public class InputParser {
 
-    private String userInput;
+    private static String userInput;
+    public final static char newLine = (char) 0x0A;
 
-    public String getUserInput() {
+    public static String getUserInput() {
         return userInput;
     }
 
-    public void setUserInput(String userInput) {
-        this.userInput = userInput;
+    public static void setUserInput(String userInput) {
+        InputParser.userInput = userInput;
     }
 
-    public int getUserInputSize() {
+    public static int getUserInputSize() {
         return userInput.length();
     }
 
-    public void userInputParser() {
+    public static void checkPreviousChar(int auxCharIndex) {
+        if (getUserInputSize() > 1) {
+            if (getUserInput().charAt(auxCharIndex - 1) >= 'A' && getUserInput().charAt(auxCharIndex - 1) <= 'G') {
+                ParserMethods.repeatPreviousNote();
+            } else {
+                ParserMethods.appendSilence();
+            }
+        } else {
+            ParserMethods.appendSilence();
+        }
+    }
 
-        for (int i = 0; i < getUserInputSize(); i++) {
+    public static void userInputParser() {
 
-            char c = getUserInput().charAt(i);
-            boolean wasNote = false; 
-            if (getUserInput().charAt(i-1)>'A' && getUserInput().charAt(i-1)<'G')
-                wasNote = true; 
-            
-            switch(c){
+        SoundHandler.initialize();
+        for (int charIndex = 0; charIndex < getUserInputSize(); charIndex++) {
+
+            char c = getUserInput().charAt(charIndex);
+
+            //check the chars of input
+            switch (c) {
                 case 'A':
                     ParserMethods.appendNoteA();
                     break;
@@ -43,10 +55,10 @@ public class InputParser {
                     break;
                 case 'F':
                     ParserMethods.appendNoteF();
-                    break;    
+                    break;
                 case 'G':
                     ParserMethods.appendNoteG();
-                    break; 
+                    break;
                 case ' ':
                     ParserMethods.doubleCurrentVol(); //ajustar 
                     break;
@@ -54,16 +66,29 @@ public class InputParser {
                     ParserMethods.doubleCurrentVol(); //ajustar 
                     break;
                 case '?':
-                    ParserMethods.octavePlus(); 
+                    ParserMethods.octavePlus();
                     break;
                 case '.':
-                    ParserMethods.octavePlus(); 
+                    ParserMethods.octavePlus();
                     break;
-                
-                    
-                    
-            }
+                case ';':
+                    ParserMethods.octavePlus(); //
+                    break;
+                case ',':
+                    ParserMethods.octavePlus();// 
+                    break;
+                case newLine:
+                    ParserMethods.octavePlus(); ////
+                    break;
+                default:
+                    if (c > '0' && c < '9') {
+                        //instrumento
+                    } else if (c == 'O' || c == 'o' || c == 'I' || c == 'i' || c == 'U' || c == 'u') {
 
+                    } else {
+                        checkPreviousChar(charIndex);
+                    }
+            }
         }
     }
 

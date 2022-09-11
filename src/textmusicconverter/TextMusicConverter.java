@@ -1,9 +1,9 @@
-package textmusicconverter;
-import org.jfugue.player.Player;
+//package textmusicconverter;
+//import org.jfugue.player.Player;
 
-public class TextMusicConverter {
+//public class TextMusicConverter {
 
-    public static void main(String[] args) { 
+    //public static void main(String[] args) { 
 
        // InputParser.setUserInput("teste string");
         //ParserMethods.appendNoteC();
@@ -23,9 +23,9 @@ public class TextMusicConverter {
     
         //MusicAssembler.playAudio();
 
-        Player player = new Player();
+        //Player player = new Player();
         //player.play("B B C6 D6 C6 B A G G A B B A A"); 
-        player.play("X[Volume]=8000 C D E");
+        //player.play("X[Volume]=8000 C D E");
         
-    }
-}
+    //}
+//}
