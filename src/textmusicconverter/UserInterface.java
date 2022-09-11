@@ -4,11 +4,23 @@
  */
 package textmusicconverter;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author brendaschussler
  */
 public class UserInterface extends javax.swing.JFrame {
+
+    private boolean musicReady = false;
+
+    public boolean isMusicReady() {
+        return musicReady;
+    }
+
+    public void setMusicReady(boolean musicReady) {
+        this.musicReady = musicReady;
+    }
 
     /**
      * Creates new form UserInterface
@@ -29,7 +41,7 @@ public class UserInterface extends javax.swing.JFrame {
         lTitle = new javax.swing.JLabel();
         lSubtitle = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tTextArea = new javax.swing.JTextArea();
+        tInputArea = new javax.swing.JTextArea();
         btnImportFile = new javax.swing.JButton();
         lInitialBpm = new javax.swing.JLabel();
         lInitialInstrument = new javax.swing.JLabel();
@@ -49,9 +61,9 @@ public class UserInterface extends javax.swing.JFrame {
         lSubtitle.setForeground(new java.awt.Color(0, 102, 102));
         lSubtitle.setText("Insira abaixo o texto que deseja converter (no máximo 1000 caracteres)");
 
-        tTextArea.setColumns(20);
-        tTextArea.setRows(5);
-        jScrollPane1.setViewportView(tTextArea);
+        tInputArea.setColumns(20);
+        tInputArea.setRows(5);
+        jScrollPane1.setViewportView(tInputArea);
 
         btnImportFile.setBackground(new java.awt.Color(0, 102, 102));
         btnImportFile.setForeground(new java.awt.Color(255, 255, 255));
@@ -63,19 +75,36 @@ public class UserInterface extends javax.swing.JFrame {
         lInitialInstrument.setFont(new java.awt.Font("Liberation Sans", 3, 16)); // NOI18N
         lInitialInstrument.setText("Instrumento inicial ");
 
-        cboxBpm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboxBpm.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        cboxBpm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "GRAVE", "LARGO", "LARGHETTO", "LENTO", "ADAGIO", "ADAGIETTO", "ANDANTE", "ANDANTINO", "MODERATO", "ALLEGRETTO", "ALLEGRO", "VIVACE", "PRESTO", "PRETISSIMO" }));
+        cboxBpm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboxBpmActionPerformed(evt);
+            }
+        });
 
+        cboxInstrument.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         cboxInstrument.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnGenerateMusic.setBackground(new java.awt.Color(0, 102, 102));
         btnGenerateMusic.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
         btnGenerateMusic.setForeground(new java.awt.Color(255, 255, 255));
         btnGenerateMusic.setText("Gerar música");
+        btnGenerateMusic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateMusicActionPerformed(evt);
+            }
+        });
 
         btnPlayMusic.setBackground(new java.awt.Color(0, 102, 102));
         btnPlayMusic.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
         btnPlayMusic.setForeground(new java.awt.Color(255, 255, 255));
         btnPlayMusic.setText("Reproduzir música");
+        btnPlayMusic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlayMusicActionPerformed(evt);
+            }
+        });
 
         btnDownloadMusic.setBackground(new java.awt.Color(0, 102, 102));
         btnDownloadMusic.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
@@ -106,8 +135,8 @@ public class UserInterface extends javax.swing.JFrame {
                                         .addComponent(cboxInstrument, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addComponent(lInitialBpm)
-                                        .addGap(98, 98, 98)
-                                        .addComponent(cboxBpm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cboxBpm, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                 .addContainerGap(69, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -133,8 +162,8 @@ public class UserInterface extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lInitialBpm)
-                    .addComponent(cboxBpm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(cboxBpm, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lInitialInstrument)
                     .addComponent(cboxInstrument, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -144,11 +173,38 @@ public class UserInterface extends javax.swing.JFrame {
                 .addComponent(btnPlayMusic)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnDownloadMusic)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnGenerateMusicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateMusicActionPerformed
+        if (tInputArea.getText().length() > 0) {
+            InputParser.setUserInput(tInputArea.getText()); //userInput recebe o que foi digitado na caixa de texto
+            setMusicReady(false);
+            InputParser.userInputParser();
+            MusicAssembler.generateAudioString();
+            setMusicReady(true);
+            JOptionPane.showMessageDialog(rootPane, "Sua música foi gerada com sucesso!", "UHUUU", JOptionPane.INFORMATION_MESSAGE);
+            //JOptionPane.showMessageDialog(rootPane, InputParser.getUserInput());
+            //JOptionPane.showMessageDialog(rootPane, SoundHandler.getBpmIndexDefault()); //teste do index bpm ok 
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Não é possível gerar música de um input vazio", "ERRO", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnGenerateMusicActionPerformed
+
+    private void btnPlayMusicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayMusicActionPerformed
+        if (isMusicReady()) {
+            MusicAssembler.playAudio();
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "A música ainda não foi gerada! Aguarde...", "ATENÇÃO", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnPlayMusicActionPerformed
+
+    private void cboxBpmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxBpmActionPerformed
+        SoundHandler.setBpmIndexDefault(cboxBpm.getSelectedIndex()); // pega o indice do bpm (0 a 13) p o vetor
+    }//GEN-LAST:event_cboxBpmActionPerformed
 
     /**
      * @param args the command line arguments
@@ -197,6 +253,6 @@ public class UserInterface extends javax.swing.JFrame {
     private javax.swing.JLabel lInitialInstrument;
     private javax.swing.JLabel lSubtitle;
     private javax.swing.JLabel lTitle;
-    private javax.swing.JTextArea tTextArea;
+    private javax.swing.JTextArea tInputArea;
     // End of variables declaration//GEN-END:variables
 }

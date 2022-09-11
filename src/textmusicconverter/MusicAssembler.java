@@ -6,11 +6,11 @@ public class MusicAssembler {
     private static final Player player = new Player();
     
     public static void playAudio() {
-        System.out.println(generateAudioString());
+        //System.out.println(generateAudioString());
         player.play(generateAudioString());
     }
 
-    private static String generateAudioString() {
+    public static String generateAudioString() {
         StringBuilder builder = new StringBuilder();
 
         for (String word : SoundHandler.getAudioScript()) {
